@@ -1,0 +1,29 @@
+{
+  "consumer": {
+    "name": "catalog-service"
+  },
+  "provider": {
+    "name": "inventory-service"
+  },
+  "interactions": [
+    {
+      "providerState": "item with id 0 has at least 5 units in stock",
+      "description": "Inventory update PATCH request",
+      "request": {
+        "method": "PATCH",
+        "path": "/items/0",
+        "body": {
+          "quantity_delta": 5
+        }
+      },
+      "response": {
+        "status": 200
+      }
+    }
+  ],
+  "metadata": {
+    "pactSpecification": {
+      "version": "2.0.0"
+    }
+  }
+}

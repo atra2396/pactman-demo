@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+  pact-dev:
+    build:
+      context: /Users/atravasc/Repos/contract-testing-demo/.devcontainer/
+      args:
+        # [Choice] Python version: 3, 3.8, 3.7, 3.6
+        VARIANT: 3
+        # [Choice] Install Node.js
+        INSTALL_NODE: "false"
+        NODE_VERSION: "lts/*"
+        # On Linux, you may need to update USER_UID and USER_GID below if not your local UID is not 1000.
+        USER_UID: 1000
+        USER_GID: 1000
+
+    volumes:
+      - ./:/usr/workspaces:delegated
+
+    # Overrides default command so things don't shut down after the process ends.
+    command: sleep infinity

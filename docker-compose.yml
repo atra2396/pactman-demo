@@ -1,0 +1,49 @@
+version: '3.8'
+services: 
+    accounting:
+        build: 
+            context: /Users/atravasc/Repos/contract-testing-demo/
+            dockerfile: Dockerfile
+            target: accounting
+        env_file: compose.env
+        ports:
+            - 8000:8000
+    cart:
+        build: 
+            context: /Users/atravasc/Repos/contract-testing-demo/
+            dockerfile: Dockerfile
+            target: cart
+        env_file: compose.env
+        ports:
+            - 8001:8000
+    catalog:
+        build: 
+            context: /Users/atravasc/Repos/contract-testing-demo/
+            dockerfile: Dockerfile
+            target: catalog
+        env_file: compose.env
+        ports:
+            - 8002:8000
+    inventory:
+        build: 
+            context: /Users/atravasc/Repos/contract-testing-demo/
+            dockerfile: Dockerfile
+            target: inventory
+        env_file: compose.env
+        ports:
+            - 8003:8000
+    item:
+        build: 
+            context: /Users/atravasc/Repos/contract-testing-demo/
+            dockerfile: Dockerfile
+            target: item
+        env_file: compose.env
+        ports:
+            - 8004:8000
+    pact-broker:
+        image: pactfoundation/pact-broker:2.79.1.1
+        environment: 
+            - PACT_BROKER_DATABASE_ADAPTER=sqlite
+            - PACT_BROKER_DATABASE_NAME=broker.sqlite
+        ports: 
+            - 9292:9292

@@ -1,0 +1,53 @@
+{
+  "consumer": {
+    "name": "cart-service"
+  },
+  "provider": {
+    "name": "catalog-service"
+  },
+  "interactions": [
+    {
+      "providerState": "item with id 0 exists",
+      "description": "order item request",
+      "request": {
+        "method": "POST",
+        "path": "/order",
+        "body": {
+          "item_id": 0,
+          "quantity": 2
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "total_price": 10
+        },
+        "matchingRules": {
+          "$.body.total_price": {
+            "match": "type"
+          }
+        }
+      }
+    },
+    {
+      "providerState": "item with if 0 exists with 0 stock",
+      "description": "order item request",
+      "request": {
+        "method": "POST",
+        "path": "/order",
+        "body": {
+          "item_id": 0,
+          "quantity": 10
+        }
+      },
+      "response": {
+        "status": 400
+      }
+    }
+  ],
+  "metadata": {
+    "pactSpecification": {
+      "version": "2.0.0"
+    }
+  }
+}
