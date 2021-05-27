@@ -2,7 +2,7 @@ from fastapi.exceptions import HTTPException
 from CartService.cart_service import get_cart, create_cart, add_item_to_cart, AddItemRequest
 from pactman import Consumer, Provider, Pact, Like
 
-pact: Pact = Consumer('cart-service').has_pact_with(Provider('catalog-service'), host_name="catalog", port=8000) 
+pact: Pact = Consumer('cart-service').has_pact_with(Provider('catalog-service'), host_name="catalog", port=8005) 
 
 def test_update_cart_adds_items():
     cart_id = create_cart()

@@ -1,6 +1,7 @@
 from pactman import Consumer, Provider, Pact
 from CatalogService.catalog_service import AccountingFactory, order_item, OrderRequest
 
+# TODO: this one doesn't create a pact for some reason...
 pact: Pact = Consumer("catalog-service").has_pact_with(Provider("inventory-service"), host_name="inventory", port=8002)
 
 def test_create_order_when_inventory_in_stock():
