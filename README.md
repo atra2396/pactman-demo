@@ -1,6 +1,6 @@
 # Consumer-Driven Contract Testing Demo
 
-This repo is a work-in-progress demo of consumer-driven contract testing in Python using Pactman. The idea was to create several independent microservices and demonstrate how [Pact](http://pact.io) could be used to enforce contract tests between them.
+This repo is a work-in-progress demo of consumer-driven contract testing in Python using [Pactman](https://github.com/reecetech/pactman). The idea was to create several independent microservices and demonstrate how [Pact](http://pact.io) could be used to enforce contract tests between them.
 
 Contracts can be viewed in `cart-service-catalog-service-pact.json` and `catalog-service-accounting-service-pact.json`. The pytest files that created the contracts can be found at `CartService/test_cart_service.py` and `CatalogService/test_catalog_service.py` respectively. The provider verification steps for those contracts can be found at `CatalogService/verify_pacts.py` and `AccountingService/verify_pacts.py` respectively. There is not much there because Pact simply sets up the provider's state, builds the requests from the contracts, and then executes them and verifies that the output matches.
 
