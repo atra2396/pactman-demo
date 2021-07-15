@@ -2,42 +2,52 @@ version: '3.8'
 services: 
     accounting:
         build: 
-            context: /Users/atravasc/Repos/contract-testing-demo/
+            context: ./
             dockerfile: Dockerfile
             target: accounting
         env_file: .env
+        volumes:
+            - ./AccountingService:/src/AccountingService
         ports:
             - 8001:8000
     cart:
         build: 
-            context: /Users/atravasc/Repos/contract-testing-demo/
+            context: ./
             dockerfile: Dockerfile
             target: cart
         env_file: .env
+        volumes:
+                - ./CartService:/src/CartService
         ports:
             - 8004:8000
     catalog:
         build: 
-            context: /Users/atravasc/Repos/contract-testing-demo/
+            context: ./
             dockerfile: Dockerfile
             target: catalog
         env_file: .env
+        volumes:
+            - ./CatalogService:/src/CatalogService
         ports:
             - 8005:8000
     inventory:
         build: 
-            context: /Users/atravasc/Repos/contract-testing-demo/
+            context: ./
             dockerfile: Dockerfile
             target: inventory
         env_file: .env
+        volumes:
+            - ./InventoryService:/src/InventoryService
         ports:
             - 8002:8000
     item:
         build: 
-            context: /Users/atravasc/Repos/contract-testing-demo/
+            context: ./
             dockerfile: Dockerfile
             target: item
         env_file: .env
+        volumes:
+            - ./ItemService:/src/ItemService
         ports:
             - 8003:8000
     pact-broker:

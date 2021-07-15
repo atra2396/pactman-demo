@@ -1,10 +1,7 @@
-.PHONY: pytest
-pytest: 
-	docker-compose exec accounting pytest AccountingService/
-	docker-compose exec cart pytest CartService/
-	docker-compose exec catalog pytest CatalogService/
-	docker-compose exec inventory pytest InventoryService/
-	docker-compose exec item pytest ItemService/
+.PHONY: create-pacts
+create-pacts: 
+	docker-compose exec -w /src/CartService cart pytest
+	docker-compose exec -w /src/CatalogService catalog pytest
 
 .PHONY: verify-pacts
 verify-pacts:
@@ -12,4 +9,8 @@ verify-pacts:
 
 .PHONY: up
 up:
-	docker-compose up --build
+	docker-compose up -d
+
+.PHONY: down
+down:
+	docker-compose down
