@@ -1,6 +1,9 @@
-FROM python:3.9.4 AS build
+FROM python:3.9.6-buster AS build
 WORKDIR /src
 COPY requirements.txt ./requirements.txt
+RUN apt-get update && \
+    apt-get install ruby --no-install-recommends -y && \
+    gem install pact_broker-client
 RUN pip install -r requirements.txt
 
 FROM build AS accounting

@@ -22,4 +22,4 @@ class ProviderState(BaseModel):
 def setupState(provider_state: ProviderState):
     Database.db = {}
     if provider_state.state == "item with id 0 has price 10":
-        Database.db[0] = AccountingRecord(item_id=0, price='10', tax=1.5)
+        Database.db[0] = AccountingRecord(item_id=0, price=10, tax=1.5)
