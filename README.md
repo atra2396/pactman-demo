@@ -2,24 +2,20 @@
 
 This repo is a work-in-progress demo of consumer-driven contract testing in Python using [Pactman](https://github.com/reecetech/pactman). The idea was to create several independent microservices and demonstrate how [Pact](http://pact.io) could be used to enforce contract tests between them.
 
-Contracts can be viewed in `cart-service-catalog-service-pact.json` and `catalog-service-accounting-service-pact.json`. The pytest files that created the contracts can be found at `CartService/test_cart_service.py` and `CatalogService/test_catalog_service.py` respectively. The provider verification steps for those contracts can be found at `CatalogService/verify_pacts.py` and `AccountingService/verify_pacts.py` respectively. There is not much there because Pact simply sets up the provider's state, builds the requests from the contracts, and then executes them and verifies that the output matches.
+Contracts can be viewed in `ExamplePacts/cart-service-catalog-service-pact.json` and `ExamplePacts/catalog-service-accounting-service-pact.json`. The pytest files that created the contracts can be found at `CartService/test_cart_service.py` and `CatalogService/test_catalog_service.py` respectively. The provider verification steps for those contracts can be found at `CatalogService/verify_pacts.py` and `AccountingService/verify_pacts.py` respectively. There is not much there because Pact simply sets up the provider's state, builds the requests from the contracts, and then executes them and verifies that the output matches.
 
 ## How to use
-I don't really recommend trying to run this yet because there are still a _ton_ of kinks to iron out, and the Makefile is not even close to being finished. However, if you are truly determined to see this running right now, continue on.
 
-I do not recommend using the docker-compose file for this yet. Here is how I've been running it:
+There is a `Makefile` included that demonstrates the standard workflow one would use when creating new pacts and publishing them to the broker. In order to run these examples, you must be able to run `make` and `docker-compose`.
+1. Run `make up`. This will start the five services (Accounting, Cart, Catalog, Inventory, Item) in their own containers (to simulate several disparate microservices running independently of each other), as well as the pact-broker server.
+2. Run `make create-pacts`. This will create the pact files in each container for their contracts against the other services that they integrate with. Note that since Docker mounts each of the `XXXService` folders to the respective service's container, you should be able to see these pact files created in your local filesystem (i.e. you will not need to inspect the docker containers to see what the output is).
+3. Run `make publish-pacts`. This will publish the consumer pacts created in the previous step to the pact broker. At this point, you should be able to visit `localhost:9292` and see that there are several new pacts that do not yet have a "Last verified" date.
+4. Run `make verify-pacts`. This will test the provider's views of the pacts in the previous step. Now in the pact broker (again at `localhost:9292`), you should see that the pacts previously published now have green "Last verified" dates. Hooray!
+5. Each container runs via `uvicorn` with the `--reload` flag, so any changes you make to the APIs should be captured on the respective container in realtime. You can add new endpoints, connections, tests, etc. and see how they affect the output without having to spin everything down and back up again.
+6. When you are finished, run `make down` to spin down the services and remove the containers. There are no persistent volumes at this time, so the pact broker will lose its state when you run this command.
 
-1. Open the repo in VSCode using the included devcontainer configuration.
-2. Install the python packages, and install Ruby and the pact broker CLI [as per the instructions in this repo](https://github.com/pact-foundation/pact_broker-client)
-3. Export the environment variables to your terminal, you may have to do this multiple times if you switch windows often: `export $(cat .env | xargs)`
-4. The contracts are already created, as mentioend above. But if you want to see how they get created, you can delete the `.json` files from the root directory and run `python -m pytest CartService/test_cart_service.py` and `python -m pytest CatalogService/test_catalog_service.py` (Yes you must include the `python -m`, I still don't understand how modules work in Python and just running `pytest` wasn't working). The json contracts should have reappeared in the root of the repository. You could also just run `python -m pytest` to generate them all at once.
-5. If you started the devcontainer in step 1, the pact broker should already be running. To publish these contracts, run `pact-broker publish <contract name here>.json --consumer-app-version=1.0.0`. There are many more options you can publish with, which can be viewed in the pact broker client GitHub repo. You should see a message like this:
-    ```
-    Publishing cart-service/catalog-service pact to pact broker at http://pact-broker:9292
-    The latest version of this pact can be accessed at the following URL:
-    http://pact-broker:9292/pacts/provider/catalog-service/consumer/cart-service/latest
-    ```
-    If you navigate to `localhost:9292` in a web browser, you should see the new contract.
-6. Verifying the contracts is a bit trickier. Here is how you would verify the Cart-Catalog contract. The instructions are the same for the Catalog-Accounting contract:
-    1. Run the _provider_ service (in this case, the catalog service) in a new shell within VSCode. Note that you will probably have to export the env variables again before running it. You can start the app by running `uvicorn CatalogService.catalog_service:app`.
-    2. In the first terminal window, execute the `verify_pacts.py` file _in the provider folder_ with pytest, but with a few additional arguments: `python -m pytest --pact-publish-results --pact-provider-name=catalog-service  --pact-provider-version=1.0.0 CatalogService/verify_pacts.py`. This causes pytest to pull the contract for the given `pact-provider-name` from the pact-broker (whose URL is in an environment variable), execute the `verify_pacts` tests, and publish those results back up to the broker. If you look at the pact broker in a web browser again, you should see that the contract you previously published now has a "last verified" date.
+## TODOs
+
+- The current provider state setup is pretty bad, and not easy to understand. A better way which would more accurately reflect a _real_ application would be to give each service its own SQLite database or something along those lines.
+- A more comprehensive suite of tests to demonstrate more of Pactman's API surface.
+- Better comments to illustrate what's going on so a reader would not need to continuously flip from this repo to the Pactman repo's docs

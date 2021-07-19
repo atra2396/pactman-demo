@@ -7,16 +7,16 @@ RUN apt-get update && \
 RUN pip install -r requirements.txt
 
 FROM build AS accounting
-CMD uvicorn --host=0.0.0.0 AccountingService.accounting_service:app
+CMD uvicorn --host=0.0.0.0 --reload AccountingService.accounting_service:app
 
 FROM build AS cart
-CMD uvicorn --host=0.0.0.0 CartService.cart_service:app
+CMD uvicorn --host=0.0.0.0 --reload CartService.cart_service:app
 
 FROM build AS catalog
-CMD uvicorn --host=0.0.0.0 CatalogService.catalog_service:app
+CMD uvicorn --host=0.0.0.0 --reload CatalogService.catalog_service:app
 
 FROM build as inventory
-CMD uvicorn --host=0.0.0.0 InventoryService.inventory_service:app
+CMD uvicorn --host=0.0.0.0 --reload InventoryService.inventory_service:app
 
 FROM build as item
-CMD uvicorn --host=0.0.0.0 ItemService.item_service:app
+CMD uvicorn --host=0.0.0.0 --reload ItemService.item_service:app
