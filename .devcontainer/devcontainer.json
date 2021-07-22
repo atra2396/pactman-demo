@@ -5,6 +5,7 @@
 	"name": "Pact Demo",
 	"dockerComposeFile": ["docker-compose.yml"], 
 	"service": "pact-dev",
+	"runServices": ["pact-dev"],
 	"workspaceFolder": "/usr/workspaces",
 	// "mounts": ["../:/workspaces"],
 

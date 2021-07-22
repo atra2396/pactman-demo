@@ -11,7 +11,7 @@ def test_order_total_cost():
     pact.given("item with id 0 has price 10") \
         .upon_receiving("Accounting GET request") \
         .with_request("GET", "/items/0") \
-        .will_respond_with(200, body={ "price": 10})
+        .will_respond_with(200, body={ "price": 10 })
     with pact:
         response = order_item(request)
     
